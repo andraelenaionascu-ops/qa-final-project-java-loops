@@ -20,25 +20,3 @@ jobs:
 
       - name: Run Maven Tests
         run: mvn test # Aceasta este comanda ceruta. Va rula chiar daca nu avem cod Java inca.
-
-  # JOB 2: Build si Push (Aici "aterizam" in Docker Hub)
-  build-and-push:
-    needs: test # CRITIC: Acest job porneste DOAR daca job-ul "test" a terminat cu succes (verde)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }} # Foloseste secretele salvate anterior
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          # inlocuieste 'utilizator' cu numele tau de Docker Hub
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/qa-final-project-java:latest
